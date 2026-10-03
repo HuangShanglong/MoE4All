@@ -144,9 +144,19 @@ if [ -f "$STATE_FILE" ]; then
 fi
 
 # ------------------------------------------------------------- locate infr ---
+# Resolve the launcher's own directory, not the caller's, so the wizard works
+# when invoked by path from anywhere — mirroring how the Windows wizard finds
+# infr.exe next to itself.
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
 find_infr() {
     local candidate
-    for candidate in ./target/release/infr ./infr "$(command -v infr || true)"; do
+    for candidate in \
+        "$SCRIPT_DIR/target/release/infr" \
+        "$SCRIPT_DIR/infr" \
+        ./target/release/infr \
+        ./infr \
+        "$(command -v infr || true)"; do
         [ -n "$candidate" ] && [ -x "$candidate" ] && { printf '%s\n' "$candidate"; return 0; }
     done
     return 1
