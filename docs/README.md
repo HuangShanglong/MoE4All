@@ -54,6 +54,9 @@ at that index. It holds:
 - [igpu.md](igpu.md) — integrated-GPU correctness campaign (AMD APU / Intel iGPU
   / Strix Halo class): the UMA heap-table insight, the per-submit watchdog
   root-cause + submit-splitter fix, and the model survey. Phase 1 complete.
+- [linux.md](linux.md) — building `infr` from source on Linux, the
+  `Start-INFR-Wizard-Linux.sh` launcher, and the platform notes: the shaderc
+  version requirement, `-C target-cpu=native`, and the amdgpu GTT aperture.
 
 ## Models & architectures
 

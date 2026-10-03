@@ -78,58 +78,18 @@ The default API base URL is `http://127.0.0.1:8080/v1`. See the
 
 ## Build from source (Linux)
 
-The release archives are Windows-only; on Linux, build from source. The result is
-`target/release/infr`.
-
-**Prerequisites**
-
-- **Rust** — `rust-toolchain.toml` pins **1.97.1** (with `rustfmt` and `clippy`);
-  `rustup` installs it automatically on the first build.
-- **`glslc` (shaderc)** — the compute shaders are compiled at build time. The
-  dp4a shaders need `GL_EXT_integer_dot_product`, so the compiler must be
-  **shaderc 2025 or newer**; Ubuntu 24.04 ships shaderc 2023.8, which is too old
-  (Ubuntu 26.04 ships a usable one).
-- **A Vulkan driver is needed to run, not to build** — `ash` loads `libvulkan` at
-  runtime via `dlopen`. On AMD that means RADV (Mesa).
+The release archives are Windows-only; on Linux, build from source:
 
 ```sh
 sudo apt-get update && sudo apt-get install -y glslc
-git clone https://github.com/Headmaster218/MoE4All.git
-cd MoE4All
+git clone https://github.com/Headmaster218/MoE4All.git && cd MoE4All
 cargo build --release --locked -p infr-cli
+./Start-INFR-Wizard-Linux.sh      # interactive launcher; --dry-run prints only
 ```
 
-**Run**
-
-```sh
-./Start-INFR-Wizard-Linux.sh        # interactive launcher
-```
-
-The wizard walks through model selection, profile and resources, and prints the
-final command before launching; add `--dry-run` to print it without launching.
-
-Or use the CLI directly:
-
-```sh
-./target/release/infr devices               # list visible Vulkan devices + VRAM
-./target/release/infr run   <model>         # terminal chat
-./target/release/infr serve <model>         # OpenAI-compatible API
-```
-
-`<model>` may be a local `.gguf` path or a Hugging Face reference
-(`org/repo[:quant]`); **only the latter is auto-downloaded when missing — a local
-path is not**.
-
-**Notes**
-
-- `.cargo/config.toml` sets `-C target-cpu=native` (the CPU backend leans on it
-  to autovectorize), so the binary is ISA-specific to the build machine; override
-  it when distributing across machines.
-- The GPU integration tests are `#[ignore]`d (they need a real Vulkan device):
-  `cargo test --workspace --locked -- --include-ignored`
-- Large MoE models map a host tier into the GPU aperture; on AMD you may need a
-  larger GTT — set `options amdgpu gttsize=<MiB>` under `/etc/modprobe.d/`
-  (applied when the amdgpu module loads; needs a reboot).
+Requires Rust 1.97.1 (installed by `rustup` from `rust-toolchain.toml`) and
+`glslc` from shaderc 2025 or newer. The full guide — run modes, platform notes,
+the `amdgpu gttsize` caveat — is in [Linux build & run](docs/linux.md).
 
 ## Measured results
 
