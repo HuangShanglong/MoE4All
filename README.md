@@ -86,10 +86,22 @@ cargo build --release --locked -p infr-cli
 **运行**
 
 ```sh
-./target/release/infr devices                # 列出可见 Vulkan 设备及其显存
-./target/release/infr run   <第一片.gguf>    # 终端聊天（模型缺失时自动拉取）
-./target/release/infr serve <第一片.gguf>    # OpenAI 兼容 API
+./Start-INFR-Wizard-Linux.sh        # 交互式启动向导
 ```
+
+向导会引导选择模型、配置档位与资源，并在启动前打印最终命令；加上 `--dry-run`
+则只打印命令、不启动。
+
+也可以直接使用 CLI：
+
+```sh
+./target/release/infr devices               # 列出可见 Vulkan 设备及其显存
+./target/release/infr run   <模型>          # 终端聊天
+./target/release/infr serve <模型>          # OpenAI 兼容 API
+```
+
+`<模型>` 可以是本地 `.gguf` 路径，也可以是 Hugging Face 引用（`org/repo[:quant]`）；
+**只有后者在缺失时自动下载，本地路径不会**。
 
 **注意事项**
 

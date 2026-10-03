@@ -102,10 +102,23 @@ cargo build --release --locked -p infr-cli
 **Run**
 
 ```sh
-./target/release/infr devices                    # list visible Vulkan devices + VRAM
-./target/release/infr run   <shard-00001.gguf>   # terminal chat (auto-pulls)
-./target/release/infr serve <shard-00001.gguf>   # OpenAI-compatible API
+./Start-INFR-Wizard-Linux.sh        # interactive launcher
 ```
+
+The wizard walks through model selection, profile and resources, and prints the
+final command before launching; add `--dry-run` to print it without launching.
+
+Or use the CLI directly:
+
+```sh
+./target/release/infr devices               # list visible Vulkan devices + VRAM
+./target/release/infr run   <model>         # terminal chat
+./target/release/infr serve <model>         # OpenAI-compatible API
+```
+
+`<model>` may be a local `.gguf` path or a Hugging Face reference
+(`org/repo[:quant]`); **only the latter is auto-downloaded when missing — a local
+path is not**.
 
 **Notes**
 
